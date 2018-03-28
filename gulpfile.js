@@ -21,13 +21,21 @@ gulp.task('css', function () {
     .pipe(browserSync.reload({stream:true}));
 });
 
-gulp.task( 'browser-sync', function() {
-  browserSync.init( {
-    proxy: 'dev4',    // Project URL
-    open: true,                 // 'true' automatically opens BrowserSync live server, 'false' does not
-    injectChanges: true,        // Inject CSS changes, comment it to reload browser for every CSS change
-    // port: 7000,              // Use a specific port (instead of the one auto-detected by Browsersync)
-  } );
+gulp.task('php', function() {
+    php.server({
+        base: '.',      // Root folder for project
+        port: 8000,     // Specified port for local dev
+        keepalive: true
+    });
+});
+
+gulp.task('browser-sync', ['php'], function() {
+    browserSync({
+        proxy: '127.0.0.1:8000',    // Project URL
+        port: 8080,                 // Use a specific port (instead of the one auto-detected by Browsersync)
+        open: true,                 // 'true' automatically opens BrowserSync live server, 'false' does not
+        notify: false
+    });
 });
 
 gulp.task('default', ['css', 'browser-sync'], function () {
